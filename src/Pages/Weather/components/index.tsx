@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 // import { fetchWeatherData } from "../api";
-import Cities from "./cities";
+import Form from "./form";
 
 function WeatherPage() {
   async function fetchWeather() {
@@ -16,7 +16,7 @@ function WeatherPage() {
   }, []);
   return (
     <>
-      <Cities />
+      <Form />
     </>
   );
 }

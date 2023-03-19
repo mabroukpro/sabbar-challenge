@@ -1,7 +1,9 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import citiesReducer from "./citiesSlice";
+import formReducer from "./slices/formSlice";
+import citiesReducer from "./slices/citiesSlice";
 
 const rootReducer = combineReducers({
+  form: formReducer,
   cities: citiesReducer,
 });
 export default rootReducer;

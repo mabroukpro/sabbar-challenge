@@ -17,8 +17,8 @@
   }
 }
 
-//cities
-.cities-forms {
+//forms
+.weather-forms {
   .city-form {
     display: flex;
     align-items: center;
@@ -33,11 +33,21 @@
       width: calc(40% - 20px);
     }
   }
+  .checkboxes-row {
+    padding: 10px;
+  }
   .button-row {
     display: flex;
     justify-content: flex-end;
     .add-btn {
       margin-right: 10px;
     }
+  }
+}
+
+//cities
+.cities-table {
+  .table-col {
+    width: 100%;
   }
 }

@@ -5,5 +5,12 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-export { addCity, updateCity, removeCity } from "./citiesSlice";
+export {
+  addForm,
+  updateFormEntry,
+  removeForm,
+  toggleTemp,
+  toggleRelativeHumidity,
+} from "./slices/formSlice";
+export { removeCity, updateCity, addCity } from "./slices/citiesSlice";
 export default store;
