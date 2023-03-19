@@ -75,7 +75,7 @@ function ReportsTable() {
       navigate("/", { state: { loadAllForms: true } });
       dispatch(viewForm(reports.entries[index].form));
     },
-    [dispatch, reports,navigate]
+    [dispatch, reports, navigate]
   );
 
   const columns: ColumnType<ReportRow>[] = [
@@ -155,6 +155,7 @@ function ReportsTable() {
           type="primary"
           icon={<DeleteOutlined />}
           onClick={(ev) => {
+            setSelectedRows([]);
             onDeleteReports();
           }}
         />
