@@ -18,6 +18,8 @@ import {
   updateFormEntry,
   toggleTemp,
   toggleRelativeHumidity,
+  fetchWeatherFromForm,
+  AppDispatch,
 } from "../../../store";
 
 const { RangePicker } = DatePicker;
@@ -25,7 +27,7 @@ const { RangePicker } = DatePicker;
 function CityForm() {
   const form = useSelector((store: RootState) => store.form);
   const cities = useSelector((store: RootState) => store.cities);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [dates, setDates] = useState<RangeValue[]>([]);
 
@@ -47,36 +49,37 @@ function CityForm() {
     [dates]
   );
 
-  const selectDate = useCallback(
+  const onSelectDate = useCallback(
     (val: RangeValue, index: number, form: Form) => {
-      dispatch(
-        updateFormEntry({
-          ...form,
-          dateRange: {
-            from: val?.[0]?.format("YYYY-MM-DD"),
-            to: val?.[1]?.format("YYYY-MM-DD"),
-          },
-        })
-      );
+      const updatedForm = {
+        ...form,
+        dateRange: {
+          from: val?.[0]?.format("YYYY-MM-DD"),
+          to: val?.[1]?.format("YYYY-MM-DD"),
+        },
+      };
+      dispatch(updateFormEntry(updatedForm));
+      dispatch(fetchWeatherFromForm(updatedForm));
     },
     [dispatch]
   );
 
-  const selectCity = useCallback(
+  const onSelectCity = useCallback(
     (val: string, form: Form) => {
       const city = cities.filter((city) => city.id === parseInt(val))[0];
-      dispatch(
-        updateFormEntry({
-          ...form,
-          lat: city.lat,
-          long: city.long,
-        })
-      );
+      const updatedForm = {
+        ...form,
+        city: city,
+        lat: city.lat,
+        long: city.long,
+      };
+      dispatch(updateFormEntry(updatedForm));
+      dispatch(fetchWeatherFromForm(updatedForm));
     },
     [dispatch, cities]
   );
 
-  const onOpenChange = useCallback(
+  const onDateOpenChange = useCallback(
     (open: boolean, index: number) => {
       if (open) {
         updateDateState([null, null], index);
@@ -95,6 +98,14 @@ function CityForm() {
             title="Latitude"
             type="number"
             value={form.lat}
+            onBlur={(ev) =>
+              dispatch(
+                fetchWeatherFromForm({
+                  ...form,
+                  lat: parseFloat(ev.target.value || "0"),
+                })
+              )
+            }
             onChange={(ev) =>
               dispatch(
                 updateFormEntry({
@@ -109,6 +120,14 @@ function CityForm() {
             type="number"
             placeholder="Latitude"
             value={form.long}
+            onBlur={(ev) =>
+              dispatch(
+                fetchWeatherFromForm({
+                  ...form,
+                  long: parseFloat(ev.target.value || "0"),
+                })
+              )
+            }
             onChange={(ev) =>
               dispatch(
                 updateFormEntry({
@@ -124,14 +143,15 @@ function CityForm() {
             showSearch
             placeholder="Select a City"
             optionFilterProp="children"
-            onChange={(val) => selectCity(val, form)}
+            onChange={(val) => onSelectCity(val, form)}
+            value={form.city?.id.toString()}
             // onSearch={onSearch}
             filterOption={(input, option) =>
               (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
             }
             options={cities.map((city) => ({
               label: city.name,
-              value: city.id,
+              value: city.id.toString(),
             }))}
           />
           <RangePicker
@@ -143,8 +163,8 @@ function CityForm() {
             }
             disabledDate={(current) => disabledDate(current, dates[index])}
             onCalendarChange={(val) => updateDateState(val, index)}
-            onChange={(val) => selectDate(val, index, form)}
-            onOpenChange={(val) => onOpenChange(val, index)}
+            onChange={(val) => onSelectDate(val, index, form)}
+            onOpenChange={(val) => onDateOpenChange(val, index)}
           />
         </div>
       )),
@@ -152,15 +172,14 @@ function CityForm() {
       form,
       cities,
       dates,
-      onOpenChange,
+      onDateOpenChange,
       updateDateState,
-      selectDate,
+      onSelectDate,
       disabledDate,
       dispatch,
-      selectCity,
+      onSelectCity,
     ]
   );
-  console.log(form);
 
   return (
     <div className="weather-forms">
@@ -191,6 +210,11 @@ function CityForm() {
         >
           Relative Humidity
         </Checkbox>
+      </div>
+      <div className="button-row">
+        <Button className="add-btn" type="primary">
+          Save Report
+        </Button>
       </div>
     </div>
   );

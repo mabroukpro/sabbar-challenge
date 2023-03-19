@@ -1,38 +1,22 @@
 import axios from "axios";
-
-export interface WeatherData {
-  hourly: {
-    time: string[];
-    temperature_2m: number[];
-    relativehumidity_2m: number[];
-  };
-  hourly_units: {
-    relativehumidity_2m: string;
-    time: string;
-    temperature_2m: string;
-  };
-}
-
+import { Weather } from "../../store/types";
 export interface WeatherDataInput {
-  lat: number;
-  long: number;
+  lat?: number;
+  long?: number;
   start?: string;
   end?: string;
-  data: string[];
 }
 
 export async function fetchWeatherData(
   input: WeatherDataInput
-): Promise<WeatherData> {
-  const dataToShow = input.data.join(",");
-  //this should be moved to the .env file
+): Promise<Weather> {
   const endpoint =
     process.env.REACT_APP_WEATHER_URL +
-    `?latitude=${input.lat}&longitude=${input.long}&hourly=${dataToShow}`;
+    `?latitude=${input.lat}&longitude=${input.long}&hourly=temperature_2m,relativehumidity_2m&start_date=${input.start}&end_date=${input.end}`;
 
   try {
     const response = await axios.get(endpoint);
-    const data: WeatherData = await response.data;
+    const data: Weather = await response.data;
 
     return data;
   } catch (error) {
