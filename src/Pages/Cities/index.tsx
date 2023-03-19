@@ -1,9 +1,9 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { FloatButton, message } from "antd";
 import { useCallback, useState } from "react";
-import { MessageType } from "../../../enums/messageType";
-import AddCityModal from "./addCityModal";
-import CitiesTable from "./citiiesTable";
+import { MessageType } from "../../enums/messageType";
+import AddCityModal from "./components/addCityModal";
+import CitiesTable from "./components/citiiesTable";
 
 function CitiesPage() {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -11,17 +11,11 @@ function CitiesPage() {
   const showMessage = useCallback(
     (message: string, type: MessageType) => {
       switch (type) {
-        case MessageType.INFO:
-          messageApi.info(message);
-          break;
         case MessageType.ERROR:
           messageApi.error(message);
           break;
         case MessageType.SUCCESS:
           messageApi.success(message);
-          break;
-        case MessageType.WARNING:
-          messageApi.warning(message);
           break;
       }
     },

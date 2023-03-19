@@ -1,5 +1,11 @@
+import ReportsTable from "./components/reportsTable";
+
 function ReportsPage() {
-  return <>Reports</>;
+  return (
+    <>
+      <ReportsTable />
+    </>
+  );
 }
 
 export default ReportsPage;

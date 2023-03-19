@@ -20,7 +20,7 @@ const items: MenuProps["items"] = [
 function Header() {
   return (
     <div className="header">
-      <h2>Weather App</h2>
+      <h2>Chart App</h2>
       <Menu className="menu" mode="horizontal" items={items} />
     </div>
   );

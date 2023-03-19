@@ -1,12 +1,12 @@
 //react
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //js
 import dayjs, { Dayjs } from "dayjs";
 
 //ui
-import { Button, Checkbox, Input, Select } from "antd";
+import { Button, Checkbox, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -18,9 +18,13 @@ import {
   updateFormEntry,
   toggleTemp,
   toggleRelativeHumidity,
-  fetchWeatherFromForm,
+  fetchChartFromForm,
   AppDispatch,
+  clearCharts,
 } from "../../../store";
+import { addReport } from "../../../store/";
+import { MessageType } from "../../../enums/messageType";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const { RangePicker } = DatePicker;
 
@@ -28,6 +32,38 @@ function CityForm() {
   const form = useSelector((store: RootState) => store.form);
   const cities = useSelector((store: RootState) => store.cities);
   const dispatch = useDispatch<AppDispatch>();
+  const [canSaveReport, setCanSaveReport] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state && location.state.loadAllForms) {
+      dispatch(clearCharts());
+      form.entries.forEach((form) => {
+        dispatch(fetchChartFromForm(form));
+      });
+      navigate(location.pathname, { state: {} });
+    }
+  }, [dispatch, location, navigate, form]);
+
+  useEffect(() => {
+    setCanSaveReport(true);
+  }, [form]);
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const showMessage = useCallback(
+    (message: string, type: MessageType) => {
+      switch (type) {
+        case MessageType.ERROR:
+          messageApi.error(message);
+          break;
+        case MessageType.SUCCESS:
+          messageApi.success(message);
+          break;
+      }
+    },
+    [messageApi]
+  );
 
   const [dates, setDates] = useState<RangeValue[]>([]);
 
@@ -59,7 +95,7 @@ function CityForm() {
         },
       };
       dispatch(updateFormEntry(updatedForm));
-      dispatch(fetchWeatherFromForm(updatedForm));
+      dispatch(fetchChartFromForm(updatedForm));
     },
     [dispatch]
   );
@@ -74,7 +110,7 @@ function CityForm() {
         long: city.long,
       };
       dispatch(updateFormEntry(updatedForm));
-      dispatch(fetchWeatherFromForm(updatedForm));
+      dispatch(fetchChartFromForm(updatedForm));
     },
     [dispatch, cities]
   );
@@ -88,6 +124,13 @@ function CityForm() {
     [updateDateState]
   );
 
+  const onSaveReport = useCallback(() => {
+    const now = dayjs();
+    dispatch(addReport({ form, creationDate: now.format("YYYY-MM-DD HH:mm") }));
+    showMessage("Report Saved", MessageType.SUCCESS);
+    setCanSaveReport(false);
+  }, [dispatch, form, showMessage]);
+
   const renderForms: JSX.Element[] = useMemo(
     () =>
       form.entries.map((form, index) => (
@@ -100,7 +143,7 @@ function CityForm() {
             value={form.lat}
             onBlur={(ev) =>
               dispatch(
-                fetchWeatherFromForm({
+                fetchChartFromForm({
                   ...form,
                   lat: parseFloat(ev.target.value || "0"),
                 })
@@ -122,7 +165,7 @@ function CityForm() {
             value={form.long}
             onBlur={(ev) =>
               dispatch(
-                fetchWeatherFromForm({
+                fetchChartFromForm({
                   ...form,
                   long: parseFloat(ev.target.value || "0"),
                 })
@@ -182,7 +225,8 @@ function CityForm() {
   );
 
   return (
-    <div className="weather-forms">
+    <div className="chart-forms">
+      {contextHolder}
       {renderForms}
       <div className="button-row">
         <Button
@@ -212,7 +256,12 @@ function CityForm() {
         </Checkbox>
       </div>
       <div className="button-row">
-        <Button className="add-btn" type="primary">
+        <Button
+          disabled={!canSaveReport}
+          onClick={(ev) => onSaveReport()}
+          className="add-btn"
+          type="primary"
+        >
           Save Report
         </Button>
       </div>

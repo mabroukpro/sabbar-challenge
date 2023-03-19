@@ -5,7 +5,7 @@ const formSlice = createSlice({
   name: "forms",
   initialState: {
     entries: [{ id: 1 }],
-    relativehumidity_2m: false,
+    relativehumidity_2m: true,
     temperature_2m: true,
   } as FormState,
   reducers: {
@@ -42,6 +42,9 @@ const formSlice = createSlice({
       }
       state.relativehumidity_2m = action.payload;
     },
+    viewForm: (state, action: PayloadAction<FormState>) => {
+      return action.payload;
+    },
   },
 });
 
@@ -49,6 +52,7 @@ export const {
   addForm,
   removeForm,
   updateFormEntry,
+  viewForm,
   toggleTemp,
   toggleRelativeHumidity,
 } = formSlice.actions;

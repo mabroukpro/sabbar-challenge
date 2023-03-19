@@ -19,7 +19,7 @@ export interface City {
   lat: number;
   editMode: boolean;
 }
-export interface Weather {
+export interface Chart {
   id: number;
   city?: City;
   hourly: {
@@ -34,8 +34,8 @@ export interface Weather {
   };
 }
 export interface Report {
-  id: number;
-  form: Form;
+  id?: number;
+  form: FormState;
   creationDate: string;
 }
 export interface ReportState {
@@ -47,6 +47,6 @@ export interface FormState {
   relativehumidity_2m: boolean;
 }
 export interface CitiesState extends Array<City> {}
-export interface WeatherState extends Array<Weather> {}
+export interface ChartState extends Array<Chart> {}
 
 export type RootState = ReturnType<typeof rootReducer>;

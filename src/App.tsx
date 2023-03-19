@@ -3,9 +3,9 @@ import Header from "./Pages/header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.scss";
-import WeatherPage from "./Pages/Weather/components";
+import ChartPage from "./Pages/Home/components";
 import ReportsPage from "./Pages/Reports";
-import CitiesPage from "./Pages/Cities/components";
+import CitiesPage from "./Pages/Cities";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-          <Route path="/" Component={WeatherPage} />
+          <Route path="/" Component={ChartPage} />
           <Route path="/reports" Component={ReportsPage} />
           <Route path="/cities" Component={CitiesPage} />
         </Routes>

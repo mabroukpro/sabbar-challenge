@@ -8,11 +8,13 @@ const store = configureStore({
 export {
   addForm,
   updateFormEntry,
+  viewForm,
   removeForm,
   toggleTemp,
   toggleRelativeHumidity,
 } from "./slices/formSlice";
 export { removeCity, updateCity, addCity } from "./slices/citiesSlice";
-export { fetchWeatherFromForm } from "./slices/weatherSlice";
+export { fetchChartFromForm, clearCharts } from "./slices/chartsSlice";
+export { removeReports, addReport } from "./slices/reportsSlice";
 export type AppDispatch = typeof store.dispatch;
 export default store;
