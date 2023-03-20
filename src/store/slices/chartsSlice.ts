@@ -29,15 +29,13 @@ const chartsSlice = createSlice({
   name: "chart",
   initialState: [] as ChartState,
   reducers: {
-    clearCharts(state, action: PayloadAction) {
+    clearCharts(_: ChartState, action: PayloadAction) {
       return [];
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchChartFromForm.fulfilled, (state, action) => {
-      const index = state.findIndex(
-        (chart) => chart.id === action.payload.id
-      );
+      const index = state.findIndex((chart) => chart.id === action.payload.id);
       if (index === -1) {
         state.push(action.payload);
       } else {

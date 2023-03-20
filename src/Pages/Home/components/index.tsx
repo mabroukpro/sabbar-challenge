@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-// import { fetchChartData } from "../api";
 import Form from "./form";
 import ChartDisplay from "./chart";
 
