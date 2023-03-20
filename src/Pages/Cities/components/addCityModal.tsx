@@ -2,7 +2,7 @@ import { Button, Input, Modal } from "antd";
 import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCity } from "../../../store";
-interface AddCityModalProps {
+export interface AddCityModalProps {
   open: boolean;
   onClose: () => void;
 }
@@ -49,7 +49,7 @@ function AddCityModal(props: AddCityModalProps) {
         onChange={(ev) => setLat(parseFloat(ev.target.value))}
       />
 
-      <label htmlFor="long">Longtude</label>
+      <label htmlFor="long">Longitude</label>
       <Input
         style={{ marginBottom: 10 }}
         id="long"

@@ -1,11 +1,11 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Header from "../../Pages/header";
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 
 describe("Header component", () => {
-  test("renders the menu items correctly", () => {
+  test("renders the menu items correctly", async () => {
     render(
       <MemoryRouter initialEntries={["/reports"]}>
         <Header />
@@ -16,12 +16,12 @@ describe("Header component", () => {
     const reportsLink = screen.getByRole("link", { name: /reports/i });
     const citiesLink = screen.getByRole("link", { name: /cities/i });
 
-    expect(homeLink).toBeInTheDocument();
+    await waitFor(() => expect(homeLink).toBeInTheDocument());
     expect(reportsLink).toBeInTheDocument();
     expect(citiesLink).toBeInTheDocument();
   });
 
-  test("sets the correct menu item as active based on current route", () => {
+  test("sets the correct menu item as active based on current route", async () => {
     render(
       <MemoryRouter initialEntries={["/reports"]}>
         <Header />
@@ -30,6 +30,8 @@ describe("Header component", () => {
 
     const activeMenuItem = screen.getByRole("menuitem", { name: /reports/i });
 
-    expect(activeMenuItem).toHaveClass("ant-menu-item-selected");
+    await waitFor(() =>
+      expect(activeMenuItem).toHaveClass("ant-menu-item-selected")
+    );
   });
 });
