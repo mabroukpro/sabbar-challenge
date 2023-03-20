@@ -22,7 +22,7 @@ function Header() {
   const currentRoute = location.pathname;
   return (
     <div className="header">
-      <h2>Chart App</h2>
+      <h2>Weather App</h2>
       <Menu
         selectedKeys={[currentRoute]}
         className="menu"

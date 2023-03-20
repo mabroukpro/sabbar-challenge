@@ -2,10 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchChartData, ChartDataInput } from "../../Pages/Home/api";
 import { Form, ChartState } from "../types";
 
-function validateForm(input: ChartDataInput) {
+function validateForm(input: ChartDataInput): boolean {
   if (!input.lat || !input.long || !input.start || !input.end) {
-    throw new Error("Please complete the form");
+    return false;
   }
+  return true;
 }
 
 export const fetchChartFromForm = createAsyncThunk(
@@ -17,11 +18,13 @@ export const fetchChartFromForm = createAsyncThunk(
       end: form.dateRange?.to,
       start: form.dateRange?.from,
     };
-    validateForm(data);
-    const chart = await fetchChartData(data);
-    chart.id = form.id;
-    chart.city = form.city;
-    return chart;
+    if (validateForm(data)) {
+      const chart = await fetchChartData(data);
+      chart.id = form.id;
+      chart.city = form.city;
+      return chart;
+    }
+    return Promise.reject("Form is not Complete");
   }
 );
 
@@ -41,6 +44,9 @@ const chartsSlice = createSlice({
       } else {
         state[index] = action.payload;
       }
+    });
+    builder.addCase(fetchChartFromForm.rejected, (state, action) => {
+      //later show error message for the user
     });
   },
 });

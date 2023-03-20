@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Report, ReportState } from "../types";
+import { v4 as uuidv4 } from "uuid";
 
 const localReports: Report | null = localStorage.getItem("reports")
   ? JSON.parse(localStorage.getItem("reports")!)
@@ -12,9 +13,10 @@ const reportsSlice = createSlice({
   } as ReportState,
   reducers: {
     addReport: (state, action: PayloadAction<Report>) => {
-      state.entries.push({ ...action.payload, id: state.entries.length + 1 });
+      const id = uuidv4();
+      state.entries.push({ ...action.payload, id: id });
     },
-    removeReports: (state, action: PayloadAction<number[]>) => {
+    removeReports: (state, action: PayloadAction<string[]>) => {
       return {
         ...state,
         entries: state.entries.filter(

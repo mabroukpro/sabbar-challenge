@@ -17,4 +17,5 @@ export { removeCity, updateCity, addCity } from "./slices/citiesSlice";
 export { fetchChartFromForm, clearCharts } from "./slices/chartsSlice";
 export { removeReports, addReport } from "./slices/reportsSlice";
 export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;
 export default store;

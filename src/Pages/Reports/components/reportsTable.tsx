@@ -8,7 +8,7 @@ import { FormState, RootState } from "../../../store/types";
 import { useNavigate } from "react-router-dom";
 
 interface ReportRow {
-  id?: number;
+  id?: string;
   key?: string;
   cities?: string[];
   includedData?: string;
@@ -70,7 +70,7 @@ function ReportsTable() {
   }, [dispatch, selectedRows]);
 
   const onViewReport = useCallback(
-    (id: number) => {
+    (id: string) => {
       const index = reports.entries.findIndex((report) => report.id === id);
       navigate("/", { state: { loadAllForms: true } });
       dispatch(viewForm(reports.entries[index].form));

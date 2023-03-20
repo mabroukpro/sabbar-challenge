@@ -102,7 +102,7 @@ function CityForm() {
 
   const onSelectCity = useCallback(
     (val: string, form: Form) => {
-      const city = cities.filter((city) => city.id === parseInt(val))[0];
+      const city = cities.filter((city) => city.id === val)[0];
       const updatedForm = {
         ...form,
         city: city,
@@ -187,14 +187,14 @@ function CityForm() {
             placeholder="Select a City"
             optionFilterProp="children"
             onChange={(val) => onSelectCity(val, form)}
-            value={form.city?.id.toString()}
+            value={form.city?.id}
             // onSearch={onSearch}
             filterOption={(input, option) =>
               (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
             }
             options={cities.map((city) => ({
               label: city.name,
-              value: city.id.toString(),
+              value: city.id,
             }))}
           />
           <RangePicker
@@ -233,7 +233,7 @@ function CityForm() {
           className="add-btn"
           icon={<PlusOutlined />}
           onClick={(ev) => {
-            dispatch(addForm({ id: form.entries.length + 1 }));
+            dispatch(addForm());
           }}
         />
       </div>

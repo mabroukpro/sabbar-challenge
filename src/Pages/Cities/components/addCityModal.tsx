@@ -13,7 +13,7 @@ function AddCityModal(props: AddCityModalProps) {
   const [long, setLong] = useState<number>(0);
 
   const onAddCity = useCallback(() => {
-    dispatch(addCity({ id: 0, editMode: false, lat, long, name }));
+    dispatch(addCity({ editMode: false, lat, long, name }));
     //reset form
     setName("");
     setLat(0);

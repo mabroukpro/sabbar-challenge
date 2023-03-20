@@ -1,18 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Form, FormState } from "../types";
+import { v4 as uuidv4 } from "uuid";
+
+const defaultForm = [{ id: uuidv4() }];
 
 const formSlice = createSlice({
   name: "forms",
   initialState: {
-    entries: [{ id: 1 }],
+    entries: defaultForm,
     relativehumidity_2m: true,
     temperature_2m: true,
   } as FormState,
   reducers: {
-    addForm: (state, action: PayloadAction<Form>) => {
-      state.entries.push(action.payload);
+    addForm: (state, action: PayloadAction) => {
+      const id = uuidv4();
+      state.entries.push({ id });
     },
-    removeForm: (state, action: PayloadAction<number>) => {
+    removeForm: (state, action: PayloadAction<string>) => {
       return {
         ...state,
         entries: state.entries.filter((form) => form.id !== action.payload),

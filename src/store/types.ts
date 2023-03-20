@@ -2,7 +2,7 @@ import { Dayjs } from "dayjs";
 import rootReducer from "./rootReducer";
 export type RangeValue = [Dayjs | null, Dayjs | null] | null;
 export interface Form {
-  id: number;
+  id?: string;
   name?: string;
   lat?: number;
   long?: number;
@@ -13,14 +13,14 @@ export interface Form {
   };
 }
 export interface City {
-  id: number;
+  id?: string;
   name: string;
   long: number;
   lat: number;
-  editMode: boolean;
+  editMode?: boolean;
 }
 export interface Chart {
-  id: number;
+  id?: string;
   city?: City;
   hourly: {
     time: string[];
@@ -34,7 +34,7 @@ export interface Chart {
   };
 }
 export interface Report {
-  id?: number;
+  id?: string;
   form: FormState;
   creationDate: string;
 }

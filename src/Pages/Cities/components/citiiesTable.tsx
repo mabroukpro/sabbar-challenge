@@ -16,7 +16,7 @@ interface CityTableRow {
   name: string;
   latitude: number;
   longtude: number;
-  editMode: boolean;
+  editMode?: boolean;
 }
 
 interface CitiesTableProps {
@@ -36,7 +36,7 @@ function CitiesTable(props: CitiesTableProps) {
   }, [cities]);
 
   const rowsFromCities: CityTableRow[] = cities.map((city) => ({
-    key: city.id.toString(),
+    key: city.id!,
     name: city.name,
     latitude: city.lat,
     longtude: city.long,
@@ -45,7 +45,7 @@ function CitiesTable(props: CitiesTableProps) {
 
   const onToggleEditMode = useCallback(
     (key: string, enable: boolean) => {
-      const city: City = cities.filter((city) => city.id === parseInt(key))[0];
+      const city: City = cities.filter((city) => city.id === key)[0];
       //reset inputs
       setLatInput(city.lat.toString());
       setLongInput(city.long.toString());
@@ -57,7 +57,7 @@ function CitiesTable(props: CitiesTableProps) {
   );
 
   const onRemoveCity = useCallback(
-    (id: number) => {
+    (id: string) => {
       dispatch(removeCity(id));
       props.onMessage(`Removed City`, MessageType.ERROR);
     },
@@ -68,7 +68,7 @@ function CitiesTable(props: CitiesTableProps) {
     (key: string) => {
       dispatch(
         updateCity({
-          id: parseInt(key),
+          id: key,
           editMode: false,
           lat: parseFloat(latInput || "0"),
           long: parseFloat(longInput || "0"),
@@ -102,7 +102,7 @@ function CitiesTable(props: CitiesTableProps) {
         return (
           <Space size="middle">
             <Button
-              onClick={(ev) => onRemoveCity(parseInt(record.key))}
+              onClick={(ev) => onRemoveCity(record.key)}
               icon={<DeleteOutlined />}
             ></Button>
             <Button
