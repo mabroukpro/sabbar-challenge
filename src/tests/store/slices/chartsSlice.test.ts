@@ -3,7 +3,7 @@ import chartsReducer, {
   clearCharts,
   fetchChartFromForm,
 } from "../../../store/slices/chartsSlice";
-import { Chart, Form } from "../../../store/types";
+import { Form } from "../../../store/types";
 import { fetchChartData } from "../../../Pages/Home/api";
 
 jest.mock("../../../Pages/Home/api", () => ({
