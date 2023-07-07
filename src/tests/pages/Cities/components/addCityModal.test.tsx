@@ -14,7 +14,7 @@ describe("AddCityModal", () => {
 
     const cityNameInput = screen.getByLabelText("City Name");
     const latInput = screen.getByLabelText("Latitude");
-    const longInput = screen.getByLabelText("Longitude");
+    const longInput = screen.getByLabelText("Longitud");
     const addButton = screen.getByText("Add");
 
     fireEvent.change(cityNameInput, { target: { value: "New York" } });
